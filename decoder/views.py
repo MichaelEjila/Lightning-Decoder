@@ -18,32 +18,30 @@ def lninvoice(request):
     return render(request, 'decoder/lninvoice.html', {})
     
 def lnaddress(request):
+    parsedData = []
+    response = []
+    
     if request.method == 'POST':
         address = request.POST.get('lnaddress')
-    API_KEY = config('KEY')
-    url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnaddress"
+        print(address)
+        API_KEY = config('KEY')
+        url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnaddress"
 
-    payload = {"lnAddress": "mikeoxygen@bitnob.io"}
-    headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json",
-    "Authorization": "Bearer "+ API_KEY
-}
-    jsonList = []
-    response = requests.post(url, json=payload, headers=headers)
-    content = response.text
-    jsonList.append(json.loads(response.content))
-    parsedData = []
-    userData = {}
-    for data in jsonList:
-     userData['status'] = data['status']
-     userData['message'] = data['message']
-     userData['data-tag'] = data['data']['tag']
-     userData['data-metadata'] = data['data']['metadata']
-     
-
-    parsedData.append(userData)
-    return render(request, 'decoder/lnaddress.html', {'response':parsedData})
+        payload = {"request": address}
+        headers = {
+           "Accept": "application/json",
+           "Content-Type": "application/json",
+           "Authorization": "Bearer "+ API_KEY
+        }
+        jsonList = []
+        response = requests.post(url, json=payload, headers=headers)
+        print(response.text)
+        content = response.text
+        jsonList.append(json.loads(response.content))
+        userData = {}
+       
+        parsedData.append(userData)
+    return render(request, 'decoder/lnaddress.html', {'response':response})
 
 
     

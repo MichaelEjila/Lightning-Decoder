@@ -47,33 +47,32 @@ def lninvoice(request):
 
 def lnaddress(request):
     parsedData = []
-    response = []
-    
     if request.method == 'POST':
-        address = request.POST.get('lnaddress')
-        print(address)
+        ln = request.POST.get('lnaddress')
+        print(ln)
+
         api_key = config('key')
         url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnaddress"
 
-        payload = {"request": address}
+        payload = {"lnAddress": ln}
         headers = {
-           "Accept": "application/json",
-           "Content-Type": "application/json",
-           "Authorization": "Bearer " + api_key
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + api_key
         }
-        jsonList = []
+
         response = requests.post(url, json=payload, headers=headers)
-        print(response.text)
-        content = response.text
+        jsonList = []
         jsonList.append(json.loads(response.content))
         userData = {}
         for data in jsonList:
             userData['status'] = data['status']
             userData['message'] = data['message']
-            userData['Description'] = data['data']['description']
-            userData['expires_at'] = data['data']['expires_at']
+            userData['data'] = data['data']
             
         parsedData.append(userData)
-    return render(request, 'decoder/lnaddress.html', {'response':response})
 
+        print(parsedData)
+
+    return render(request, 'decoder/lnaddress.html', {'response':parsedData})
     

@@ -39,7 +39,6 @@ def lninvoice(request):
             userData['chain address'] = data['data']['chain_address']
             userData['Description'] = data['data']['description']
             userData['expires_at'] = data['data']['expires_at']
-            userData['is_expired'] = data['is_expired']
             
         parsedData.append(userData)
 

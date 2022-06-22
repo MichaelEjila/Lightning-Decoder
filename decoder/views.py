@@ -13,6 +13,7 @@ def lnurl(request):
 def lninvoice(request):
 
     return render(request, 'decoder/lninvoice.html', {})
+    
 def lnaddress(request):
 
     return render(request, 'decoder/lnadress.html', {})

@@ -1,0 +1,10 @@
+{% extends "decoder/base.html" %}
+
+{% block content %} 
+<form  method = 'POST'>
+    {% csrf_token %}
+    <input type = 'text' name = 'lninvoice'>Enter lnInvoice</input>
+    <button type = 'submit'>Enter</button>
+    <p>{{response}}</p>
+</form>
+{% endblock %}

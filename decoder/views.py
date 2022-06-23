@@ -1,30 +1,18 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+
+import requests
 from decouple import config
 import json
-import requests
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Base Page")
-
-#Extract data in its raw form
-'''
-def lnurl(request):
-    url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnurl"
-    payload = {"encodedLnUrl": "lnurl1dp68gurn8ghj7cnfw3ex2enfd3kzumt99amrztmvde6hymzlwpshjtekxycnvef48yun2wp4xs6kgvpsx93kgdp5ve3nvk9dgjd"}
-    headers = {
-        "Accept": "application/json",
-        "Content-Type" : "application/json",
-        "Authorization" : "Bearer " + api_key
-    }
-    response = requests.post(url, json=payload, headers=headers)
-    content = response.text
-    return HttpResponse(content) 
-'''
-
+    
+    return render(request, 'decoder/base.html', {})
+  
 #Extract data in an organized form
 def lnurl(request):
+
     api_key = config('key')
     url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnurl"
     payload = {"encodedLnUrl": "lnurl1dp68gurn8ghj7cnfw3ex2enfd3kzumt99amrztmvde6hymzlwpshjtekxycnvef48yun2wp4xs6kgvpsx93kgdp5ve3nvk9dgjd"}
@@ -52,9 +40,65 @@ def lnurl(request):
 
 
 def lninvoice(request):
-    return HttpResponse("Lightning Invoice page")
+    parsedData = []
+    if request.method == 'POST':
+        invoice = request.POST.get('lninvoice')
+        
+        api_key = config('key')
+        url = "https://sandboxapi.bitnob.co/api/v1/wallets/ln/decodepaymentrequest"
+    
+        payload = {"request": invoice}
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + api_key
+        }
+        
+        response = requests.post(url, json=payload, headers=headers)
+        jsonList = []
+        jsonList.append(json.loads(response.content))
+        userData = {}
+        for data in jsonList:
+            userData['status'] = data['status']
+            userData['message'] = data['message']
+            userData['chain address'] = data['data']['chain_address']
+            userData['Description'] = data['data']['description']
+            userData['expires_at'] = data['data']['expires_at']
+            
+        parsedData.append(userData)
+
+
+    return render(request, 'decoder/lninvoice.html', {'response':parsedData})
 
 
 def lnaddress(request):
-    return HttpResponse("Lightning Address page")
+    parsedData = []
+    if request.method == 'POST':
+        ln = request.POST.get('lnaddress')
+        print(ln)
+
+        api_key = config('key')
+        url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnaddress"
+
+        payload = {"lnAddress": ln}
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + api_key
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+        jsonList = []
+        jsonList.append(json.loads(response.content))
+        userData = {}
+        for data in jsonList:
+            userData['status'] = data['status']
+            userData['message'] = data['message']
+            userData['data'] = data['data']
+            
+        parsedData.append(userData)
+
+        print(parsedData)
+
+    return render(request, 'decoder/lnaddress.html', {'response':parsedData})
     

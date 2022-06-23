@@ -3,8 +3,10 @@
 {% block content %} 
 <form  method = 'POST'>
     {% csrf_token %}
-    <input type = 'text' name = 'lnurl'>Enter lnurl</input>
-    <button type = 'submit'>Enter</button>
+    <div class="for">
+                <input type="text" name="lnurl" placeholder="Enter Lightning URL Here">
+                <button type="submit" class="btn btn-dark">Decode Lightning URL</button>
     <p>{{response}}</p>
+    </div> 
 </form>
 {% endblock %}

@@ -44,8 +44,9 @@ def lnurl(request):
 
 
 def lninvoice(request):
-    parsedData = []
+    parsedData = ''
     if request.method == 'POST':
+        parsedData = []
         invoice = request.POST.get('lninvoice')
         
         api_key = config('key')
@@ -76,10 +77,10 @@ def lninvoice(request):
 
 
 def lnaddress(request):
-    parsedData = []
+    parsedData = ''
     if request.method == 'POST':
+        parsedData = []
         ln = request.POST.get('lnaddress')
-        print(ln)
 
         api_key = config('key')
         url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnaddress"
@@ -101,8 +102,6 @@ def lnaddress(request):
             userData['data'] = data['data']
             
         parsedData.append(userData)
-
-        print(parsedData)
 
     return render(request, 'decoder/lnaddress.html', {'response':parsedData})
     

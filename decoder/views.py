@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 import requests
 from decouple import config
@@ -13,121 +14,134 @@ def index(request):
 #Extract data in an organized form
 def lnurl(request):
     response_dict = ''
-    if request.method == 'POST':
-        lightning_url = request.POST.get('lnurl')
+    try:
+        if request.method == 'POST':
+            lightning_url = request.POST.get('lnurl')
 
-        api_key = config('key')
-        url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnurl"
-        payload = {"encodedLnUrl": lightning_url}
-        headers = {
-            "Accept": "application/json",
-            "Content-Type" : "application/json",
-            "Authorization" : "Bearer " + api_key
-        }
-        response = requests.post(url, json=payload, headers=headers)
+            api_key = config('key')
+            url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnurl"
+            payload = {"encodedLnUrl": lightning_url}
+            headers = {
+                "Accept": "application/json",
+                "Content-Type" : "application/json",
+                "Authorization" : "Bearer " + api_key
+            }
+            response = requests.post(url, json=payload, headers=headers)
 
-        jsonList = []
-        jsonList.append(json.loads(response.content))
-        parsedData = []
-        lnData = {}
-        for data in jsonList:
-            lnData['status'] = data['status']
-            lnData['message'] = data['message']
-            lnData['tag'] = data['data']['tag']
-            lnData['callback'] = data['data']['callback']
-            lnData['description'] = data['data']['description']
-            lnData['satMinSendable'] = data['data']['satMinSendable']
-            lnData['satMaxSendable'] = data['data']['satMaxSendable']
-        parsedData.append(lnData)
+            jsonList = []
+            jsonList.append(json.loads(response.content))
+            parsedData = []
+            lnData = {}
+            for data in jsonList:
+                lnData['status'] = data['status']
+                lnData['message'] = data['message']
+                lnData['tag'] = data['data']['tag']
+                lnData['callback'] = data['data']['callback']
+                lnData['description'] = data['data']['description']
+                lnData['satMinSendable'] = data['data']['satMinSendable']
+                lnData['satMaxSendable'] = data['data']['satMaxSendable']
+            parsedData.append(lnData)
 
-        response_dict = {}
+            response_dict = {}
 
-        for i in range(len(parsedData)):
-           response_dict = parsedData[i]
+            for i in range(len(parsedData)):
+                response_dict = parsedData[i]
+
+    except KeyError:
+        messages.info(request, 'Invalid Lightning URl')
+        return redirect('/lninvoice')
 
     return render(request, 'decoder/lnurl.html', {'response':response_dict})
 
 
 def lninvoice(request):
     response_dict = ''
-    if request.method == 'POST':
-        parsedData = []
-        invoice = request.POST.get('lninvoice')
-        
-        api_key = config('key')
-        url = "https://sandboxapi.bitnob.co/api/v1/wallets/ln/decodepaymentrequest"
-    
-        payload = {"request": invoice}
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + api_key
-        }
-        
-        response = requests.post(url, json=payload, headers=headers)
-        jsonList = []
-        jsonList.append(json.loads(response.content))
-        userData = {}
-        for data in jsonList:
-            userData['status'] = data['status']
-            userData['message'] = data['message']
-            userData['chain address'] = data['data']['chain_address']
-            userData['Description'] = data['data']['description']
-            userData['Destination'] = data['data']['destination']
-            userData['created_at'] = data['data']['created_at']
-            userData['expires_at'] = data['data']['expires_at']
-            userData['id'] = data['data']['id']
-            userData['is_expired'] = data['data']['is_expired']
-            userData['safe_tokens'] = data['data']['safe_tokens']
-            userData['tokens'] = data['data']['tokens']
-
+    try:
+        if request.method == 'POST':
+            parsedData = []
+            invoice = request.POST.get('lninvoice')
             
-        parsedData.append(userData)
+            api_key = config('key')
+            url = "https://sandboxapi.bitnob.co/api/v1/wallets/ln/decodepaymentrequest"
+        
+            payload = {"request": invoice}
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + api_key
+            }
+            
+            response = requests.post(url, json=payload, headers=headers)
+            jsonList = []
+            jsonList.append(json.loads(response.content))
+            userData = {}
+            for data in jsonList:
+                userData['status'] = data['status']
+                userData['message'] = data['message']
+                userData['chain address'] = data['data']['chain_address']
+                userData['Description'] = data['data']['description']
+                userData['Destination'] = data['data']['destination']
+                userData['created_at'] = data['data']['created_at']
+                userData['expires_at'] = data['data']['expires_at']
+                userData['id'] = data['data']['id']
+                userData['is_expired'] = data['data']['is_expired']
+                userData['safe_tokens'] = data['data']['safe_tokens']
+                userData['tokens'] = data['data']['tokens']
 
-        response_dict = {}
+                
+            parsedData.append(userData)
 
-        for i in range(len(parsedData)):
-           response_dict = parsedData[i]
+            response_dict = {}
 
+            for i in range(len(parsedData)):
+                response_dict = parsedData[i]
+
+    except KeyError:
+        messages.info(request, 'Invalid Lightning Invoice')
+        return redirect('/lninvoice')
 
     return render(request, 'decoder/lninvoice.html', {'response':response_dict})
 
 
 def lnaddress(request):
     response_dict = ''
-    if request.method == 'POST':
-        parsedData = []
-        ln = request.POST.get('lnaddress')
+    try:
+        if request.method == 'POST':
+            parsedData = []
+            ln = request.POST.get('lnaddress')
 
-        api_key = config('key')
-        url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnaddress"
+            api_key = config('key')
+            url = "https://sandboxapi.bitnob.co/api/v1/lnurl/decodelnaddress"
 
-        payload = {"lnAddress": ln}
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + api_key
-        }
+            payload = {"lnAddress": ln}
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + api_key
+            }
 
-        response = requests.post(url, json=payload, headers=headers)
-        jsonList = []
-        jsonList.append(json.loads(response.content))
-        userData = {}
-        for data in jsonList:
-            userData['status'] = data['status']
-            userData['message'] = data['message']
-            userData['tag'] = data['data']['tag']
-            userData['callback'] = data['data']['callback']
-            userData['description'] = data['data']['description']
-            userData['satMinSendable'] = data['data']['satMinSendable']
-            userData['satMaxSendable'] = data['data']['satMaxSendable']
-            
-        parsedData.append(userData)
+            response = requests.post(url, json=payload, headers=headers)
+            jsonList = []
+            jsonList.append(json.loads(response.content))
+            userData = {}
+            for data in jsonList:
+                userData['status'] = data['status']
+                userData['message'] = data['message']
+                userData['tag'] = data['data']['tag']
+                userData['callback'] = data['data']['callback']
+                userData['description'] = data['data']['description']
+                userData['satMinSendable'] = data['data']['satMinSendable']
+                userData['satMaxSendable'] = data['data']['satMaxSendable']
+                
+            parsedData.append(userData)
 
-        response_dict = {}
+            response_dict = {}
 
-        for i in range(len(parsedData)):
-           response_dict = parsedData[i]
+            for i in range(len(parsedData)):
+                response_dict = parsedData[i]
+    except KeyError:
+        messages.info(request, 'Invalid Lightning Address')
+        return redirect('/lnaddress')
 
     return render(request, 'decoder/lnaddress.html', {'response':response_dict})
     

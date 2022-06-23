@@ -15,7 +15,7 @@ from decouple import config
 import os
 import environ
 from requests import Session
-import django_heroku
+import django_on_heroku
 
 env = environ.Env()
 environ.Env.read_env()
@@ -137,4 +137,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True 
 
-django_heroku.settings(locals())
+django_on_heroku.settings(locals())

@@ -12,7 +12,7 @@ def index(request):
   
 #Extract data in an organized form
 def lnurl(request):
-    parsedData = ''
+    response_dict = ''
     if request.method == 'POST':
         lightning_url = request.POST.get('lnurl')
 
@@ -40,11 +40,16 @@ def lnurl(request):
             lnData['satMaxSendable'] = data['data']['satMaxSendable']
         parsedData.append(lnData)
 
-    return render(request, 'decoder/lnurl.html', {'response':parsedData})
+        response_dict = {}
+
+        for i in range(len(parsedData)):
+           response_dict = parsedData[i]
+
+    return render(request, 'decoder/lnurl.html', {'response':response_dict})
 
 
 def lninvoice(request):
-    parsedData = ''
+    response_dict = ''
     if request.method == 'POST':
         parsedData = []
         invoice = request.POST.get('lninvoice')
@@ -68,16 +73,28 @@ def lninvoice(request):
             userData['message'] = data['message']
             userData['chain address'] = data['data']['chain_address']
             userData['Description'] = data['data']['description']
+            userData['Destination'] = data['data']['destination']
+            userData['created_at'] = data['data']['created_at']
             userData['expires_at'] = data['data']['expires_at']
+            userData['id'] = data['data']['id']
+            userData['is_expired'] = data['data']['is_expired']
+            userData['safe_tokens'] = data['data']['safe_tokens']
+            userData['tokens'] = data['data']['tokens']
+
             
         parsedData.append(userData)
 
+        response_dict = {}
 
-    return render(request, 'decoder/lninvoice.html', {'response':parsedData})
+        for i in range(len(parsedData)):
+           response_dict = parsedData[i]
+
+
+    return render(request, 'decoder/lninvoice.html', {'response':response_dict})
 
 
 def lnaddress(request):
-    parsedData = ''
+    response_dict = ''
     if request.method == 'POST':
         parsedData = []
         ln = request.POST.get('lnaddress')
@@ -99,9 +116,18 @@ def lnaddress(request):
         for data in jsonList:
             userData['status'] = data['status']
             userData['message'] = data['message']
-            userData['data'] = data['data']
+            userData['tag'] = data['data']['tag']
+            userData['callback'] = data['data']['callback']
+            userData['description'] = data['data']['description']
+            userData['satMinSendable'] = data['data']['satMinSendable']
+            userData['satMaxSendable'] = data['data']['satMaxSendable']
             
         parsedData.append(userData)
 
-    return render(request, 'decoder/lnaddress.html', {'response':parsedData})
+        response_dict = {}
+
+        for i in range(len(parsedData)):
+           response_dict = parsedData[i]
+
+    return render(request, 'decoder/lnaddress.html', {'response':response_dict})
     

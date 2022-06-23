@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+    background: #020D1E;
 }
 
 .main{
@@ -102,14 +103,14 @@ ul li a:hover{
 }
 
 .for{
-    width: 250px;
+    width: 100px;
     height: 0.1px;
     position: relative;
-    top: -10px;
+    top: 3px;
     left: 472px;
     transform: translate(0%,-5%);
-    border-radius: 10px;
-    padding: 25px;
+    border-radius: 0px;
+    padding: 20px;
 }
 
 .for input{

@@ -1,0 +1,140 @@
+*{
+    margin: 0;
+    padding: 0;
+    background: #020D1E;
+}
+
+.main{
+    width: 100%;
+    background: #020D1E;
+    height: 110vh; 
+}
+
+.navbar{
+    width: 1200px;
+    height: 75px;
+    margin: auto;
+}
+
+.icon{
+    width: 200px;
+    float: left;
+    height: 70px;
+}
+
+.logo{
+    color: white;
+    font-size: 35px;
+    font-family: serif;
+    padding-left: 20px;
+    float: left;
+    padding-top: 10px;
+    margin-top: 5px
+}
+
+.menu{
+    width: 400px;
+    float: right;
+    height: 70px;
+}
+
+ul{
+    float: right;
+    display: flex;
+    justify-content: right;
+    align-items: right;
+}
+
+ul li{
+    list-style: none;
+    margin-left: 60px;
+    margin-top: 27px;
+    font-size: 14px;
+}
+
+ul li a{
+    text-decoration: none;
+    color: white;
+    font-family: serif;
+    font-weight: bold;
+    transition: 0.4s ease-in-out;
+}
+
+ul li a:hover{
+    color: #00E4AF;
+}
+
+.content{
+    width: 1200px;
+    height: auto;
+    margin: auto;
+    color: white;
+    float: center;
+}
+
+.content .par{
+    padding-left: 450px;
+    padding-bottom: 25px;
+    font-family: serif;
+    letter-spacing: 1.2px;
+    line-height: 30px;
+}
+
+.content h1{
+    font-family: serif;
+    font-size: 50px;
+    padding-left: 315px;
+    margin-top: 9%;
+    letter-spacing: 2px;
+}
+
+.content h2{
+    padding-left: 400px;
+    padding-bottom: 10px;
+    font-family: serif;
+    letter-spacing: 1.6px;
+    line-height: 40px;
+}
+
+.content span{
+    color: #00E4AF;
+    font-family: 'Times New Roman';
+    font-size: 70px
+}
+
+.for{
+    width: 100px;
+    height: 0.1px;
+    position: relative;
+    top: 3px;
+    left: 472px;
+    transform: translate(0%,-5%);
+    border-radius: 0px;
+    padding: 20px;
+}
+
+.for input{
+    width: 280px;
+    height: 35px;
+    background: transparent;
+    border-bottom: 1px solid #00E4AF;
+    border-top: none;
+    border-right:  2px solid #00E4AF;
+    border-left: none;
+    color: white;
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-top: 30px;
+    font-family: serif;
+}
+
+.for input:focus{
+    outline: none;
+}
+
+ ::placeholder{
+    color: white;
+    font-family: serif;
+} 
+
+

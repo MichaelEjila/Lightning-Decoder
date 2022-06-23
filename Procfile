@@ -1,0 +1,1 @@
+web gunicorn lightning_decoder.wsgi

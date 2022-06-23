@@ -15,6 +15,7 @@ from decouple import config
 import os
 import environ
 from requests import Session
+import django_heroku
 
 env = environ.Env()
 environ.Env.read_env()
@@ -32,7 +33,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['lightning-decoder.herokuapp.com']
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 
 # Application definition
@@ -135,3 +136,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True 
+
+django_heroku.settings(locals())
